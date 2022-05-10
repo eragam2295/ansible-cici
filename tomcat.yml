@@ -1,33 +1,53 @@
 ---
-- name: playbook to install tomcat
   hosts: webservers
   become: yes
   tasks:
-  - name: task to install java
-    yum:
-      name: java
-      state: present
-  - name:  task to download tomcat sever
-    get_url:
-        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.62/bin/apache-tomcat-9.0.62.tar.gz
-        dest: /opt
-  - name: task to unzip zip file using tar
-    unarchive:
-        src: /opt/apache-tomcat-9.0.62.tar.gz
-        dest: /opt
-        remote_src: yes
-  - name: task to change the permissions
-    file:
-      path: /opt/apache-tomcat-9.0.62
-      mode: 0777
-  - name: task to start the service
-    shell: ./startup.sh
-    args:
-      chdir: /opt/apache-tomcat-9.0.62/bin
-  - name: Deploy static website
-    copy:
-      src: target/maven-archetype-webapp.war
-      dest: /opt/tomcat9/webapps/
-      
-  
-...
+    - name: Install java8
+      yum:
+        name: java-1.8.0-openjdk
+        state: present
+    - name: download tomcat8
+      get_url:
+        url: https://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.69/bin/apache-tomcat-8.5.69.tar.gz
+        dest: /opt/
+    - name: check /opt/tomcat8 folder is present
+      stat:
+        path: /opt/tomcat8
+      register: st
+    - name: extract the file
+      unarchive:
+        src: /opt/apache-tomcat-8.5.69.tar.gz
+        dest: /opt/
+        remote_src: True
+      when: not st.stat.exists
+    - name: rename the folder
+      copy:
+        src: /opt/apache-tomcat-8.5.69/
+        dest: /opt/tomcat8/
+        remote_src: True
+        owner: centos
+        group: centos
+      when: not st.stat.exists
+    - name: remove unwanted files and folders
+      file:
+        path: /opt/apache-tomcat-8.5.69
+        state: absent
+
+    - name: Change file ownership, group and permissions
+      file:
+		path: /etc/systemd/system/tomcat.service
+		owner: ec2-user
+		mode: '0777'
+
+    - name: start and enable tomcat server
+      service:
+        name: tomcat
+        state: started
+        enabled: yes
+
+    - name: deploy sample app
+      copy:
+        src: target/maven-archetype-webapp
+        dest: /opt/tomcat8/webapps/
+        owner: ec2-user
+        group: ec2-user
