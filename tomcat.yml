@@ -1,4 +1,8 @@
 ---
+- name: Install java8
+  yum:
+     name: java-1.8.0-openjdk
+     state: present
 - name: playbook to install tomcat
   hosts: localhost
   become: yes
@@ -26,6 +30,6 @@
       chdir: /opt/apache-tomcat-9.0.62/bin
   - name: Deploy static website
       copy:
-        src: index.html
-        dest: /var/www/html/
+        src: /var/lib/jenkins/workspace/ansible-finaldeploy/target/*
+        dest: /opt/tomcat9/webapps/
 ...
