@@ -1,46 +1,26 @@
 ---
-- hosts: webservers
+- name: playbook to install tomcat
+  hosts: localhost
   become: yes
   tasks:
-  - name: Install java8
+  - name: task to install java
     yum:
-      name: java-1.8.0-openjdk
-      state: present
-  - name: download tomcat8
+     name: java
+     state: present
+  - name:  task to download tomcat sever
     get_url:
-      url: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz
-      dest: /opt/
-  - name: check /opt/tomcat8 folder is present
-    stat:
-      path: /opt/tomcat8
-    register: st
+        url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
+        dest: /opt
   - name: task to unzip zip file using tar
     unarchive:
-      src: /opt/apache-tomcat-8.5.78.tar.gz
-      dest: /opt
-      remote_src: yes
-    when: not st.stat.exists
-  - name: rename the folder
-    copy:
-      src: /opt/apache-tomcat-8.5.78/
-      dest: /opt/
-      remote_src: True
-      owner: ec2-user
-      group: ec2-user
-    when: not st.stat.exists
-  - name: remove unwanted files and folders
+        src: /opt/apache-tomcat-9.0.54.tar.gz
+        dest: /opt
+        remote_src: yes
+  - name: task to change the permissions
     file:
-      path: /opt/apache-tomcat-8.5.78
-      state: absent
-  - name: start and enable tomcat server
-    service:
-      name: tomcat
-      state: started
-      enabled: yes
-
-  - name: deploy sample app
-    copy:
-      src: target/maven-archetype-webapp
-      dest: /opt/tomcat8/webapps/
-      owner: ec2-user
-      group: ec2-user
+      path: /opt/apache-tomcat-9.0.54
+      mode: 0777
+  - name: task to start the service
+    shell: ./startup.sh
+    args:
+      chdir: /opt/apache-tomcat-9.0.54/bin
