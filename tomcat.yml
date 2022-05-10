@@ -1,16 +1,12 @@
 ---
-- name: Install java8
-  yum:
-     name: java-1.8.0-openjdk
-     state: present
 - name: playbook to install tomcat
-  hosts: localhost
+  hosts: webserver
   become: yes
   tasks:
   - name: task to install java
     yum:
-     name: java
-     state: present
+      name: java
+      state: present
   - name:  task to download tomcat sever
     get_url:
         url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.62/bin/apache-tomcat-9.0.62.tar.gz
@@ -28,5 +24,9 @@
     shell: ./startup.sh
     args:
       chdir: /opt/apache-tomcat-9.0.62/bin
+  - name: Deploy static website
+      copy:
+        src: /target/maven-archetype-webapp.war
+        dest: /opt/tomcat9/webapps/    
   
 ...
