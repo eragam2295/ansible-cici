@@ -18,7 +18,6 @@ pipeline {
            steps{ 
              sh 'mvn clean package'
              sh 'pwd'
-             sh 'ls -la'
 }
 }
     }
