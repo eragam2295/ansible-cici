@@ -16,7 +16,7 @@
     register: st
   - name: extract the file
     unarchive:
-      src: /opt/apache-tomcat-8.5.78-deployer
+      src: /opt/apache-tomcat-8.5.78-deployer.tar.gz.asc
       dest: /opt/
       remote_src: True
     when: not st.stat.exists
