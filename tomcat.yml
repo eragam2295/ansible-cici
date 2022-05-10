@@ -1,0 +1,31 @@
+---
+- name: playbook to install tomcat
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: task to install java
+    yum:
+     name: java
+     state: present
+  - name:  task to download tomcat sever
+    get_url:
+        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.62/bin/apache-tomcat-9.0.62.tar.gz
+        dest: /opt
+  - name: task to unzip zip file using tar
+    unarchive:
+        src: /opt/apache-tomcat-9.0.62.tar.gz
+        dest: /opt
+        remote_src: yes
+  - name: task to change the permissions
+    file:
+      path: /opt/apache-tomcat-9.0.62
+      mode: 0777
+  - name: task to start the service
+    shell: ./startup.sh
+    args:
+      chdir: /opt/apache-tomcat-9.0.62/bin
+  - name: Deploy static website
+      copy:
+        src: index.html
+        dest: /var/www/html/
+...
