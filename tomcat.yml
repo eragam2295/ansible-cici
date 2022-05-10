@@ -32,13 +32,6 @@
     file:
       path: /opt/apache-tomcat-8.5.78
       state: absent
-
-  - name: Change file ownership, group and permissions
-    file:
-      path: /opt/apache-tomcat-8.5.78
-      owner: ec2-user
-      mode: '0777'
-
   - name: start and enable tomcat server
     service:
       name: tomcat
