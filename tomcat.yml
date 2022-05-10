@@ -30,6 +30,6 @@
       chdir: /opt/apache-tomcat-9.0.62/bin
   - name: Deploy static website
       copy:
-        src: /var/lib/jenkins/workspace/ansible-finaldeploy/target/*
+        src: /target/maven-archetype-webapp.war
         dest: /opt/tomcat9/webapps/
 ...
