@@ -15,10 +15,10 @@
       path: /opt/tomcat8
     register: st
  - name: task to unzip zip file using tar
-    unarchive:
-        src: /opt/apache-tomcat-8.5.78-deployer.tar.gz.asc
-        dest: /opt
-        remote_src: yes
+   unarchive:
+     src: /opt/apache-tomcat-8.5.78-deployer.tar.gz.asc
+     dest: /opt
+     remote_src: yes
     when: not st.stat.exists
   - name: rename the folder
     copy:
