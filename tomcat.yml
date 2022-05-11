@@ -17,22 +17,37 @@
     - name: extract the file
       unarchive:
         src: /opt/apache-tomcat-8.5.78.tar.gz
-        dest: /opt/tomcat
+        dest: /opt/
         remote_src: True
       when: not st.stat.exists
+    - name: rename the folder
+      copy:
+        src: /opt/apache-tomcat-8.5.78/
+        dest: /opt/tomcat/
+        remote_src: True
+        owner: centos
+        group: centos
+      when: not st.stat.exists
+    - name: remove unwanted files and folders
+      file:
+        path: /opt/apache-tomcat-8.5.78
+        state: absent
+
     - name: Change file ownership, group and permissions
       file:
-        path: /opt/tomcat
-        mode: '0777'
+	    	path: /etc/systemd/system/tomcat.service
+		    owner: centos
+		    mode: '0777'
 
     - name: start and enable tomcat server
-      shell: ./startup.sh
-      args:
-        chdir: /opt/tomcat/bin
+      service:
+        name: tomcat
+        state: started
+        enabled: yes
+
     - name: deploy sample app
       copy:
-        src: target/maven-archetype-webapp.war
-        dest: /opt/tomcat/webapps/
-        owner: ec2-user
-        group: ec2-user
-
+        src: target/mvnwebapp.war
+        dest: /opt/tomcat8/webapps/
+        owner: centos
+        group: centos
