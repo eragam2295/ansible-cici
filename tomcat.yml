@@ -17,7 +17,7 @@
     - name: extract the file
       unarchive:
         src: /opt/apache-tomcat-8.5.78.tar.gz
-        dest: /opt/
+        dest: /opt/tomcat
         remote_src: True
       when: not st.stat.exists
     - name: Change file ownership, group and permissions
