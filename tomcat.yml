@@ -23,7 +23,7 @@
     - name: Change file ownership, group and permissions
       file:
         path: /opt/tomcat
-        owner: centos
+        owner: tomcat
         mode: '0777'
 
     - name: start and enable tomcat server
@@ -34,6 +34,6 @@
       copy:
         src: target/maven-archetype-webapp.war
         dest: /opt/tomcat/webapps/
-        owner: centos
-        group: centos    
+        owner: tomcat
+        group: tomcat 
 
