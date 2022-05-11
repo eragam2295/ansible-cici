@@ -42,5 +42,5 @@
     - name: start and enable tomcat server
       shell: ./startup.sh
       args:
-        chdir: /opt/apache-tomcat-8.5.78/bin
+        chdir: /opt/tomcat8/bin
 
