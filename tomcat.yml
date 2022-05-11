@@ -48,6 +48,6 @@
     - name: deploy sample app
       copy:
         src: target/maven-archetype-webapp
-        dest: /opt/tomcat8/webapps/
+        dest: /opt/tomcat/webapps/
         owner: centos
         group: centos
