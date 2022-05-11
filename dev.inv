@@ -1,3 +1,2 @@
 [webservers]
-3.136.18.17 ansible_user=centos 
-3.145.167.167 ansible_user=centos
+18.118.200.152 ansible_user=ec2-user
