@@ -47,7 +47,7 @@
 
     - name: deploy sample app
       copy:
-        src: target/mvnwebapp.war
+        src: target/maven-archetype-webapp
         dest: /opt/tomcat8/webapps/
         owner: centos
         group: centos
