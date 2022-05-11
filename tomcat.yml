@@ -10,9 +10,9 @@
       get_url:
         url: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz
         dest: /opt/
-    - name: check /opt/tomcat8 folder is present
+    - name: check /opt/tomcat folder is present
       stat:
-        path: /opt/tomcat8
+        path: /opt/tomcat
       register: st
     - name: extract the file
       unarchive:
@@ -20,33 +20,20 @@
         dest: /opt/
         remote_src: True
       when: not st.stat.exists
-    - name: rename the folder
-      copy:
-        src: /opt/apache-tomcat-8.5.78/
-        dest: /opt/tomcat8/
-        remote_src: True
-        owner: centos
-        group: centos
-      when: not st.stat.exists
-    - name: remove unwanted files and folders
-      file:
-        path: /opt/apache-tomcat-8.5.78
-        state: absent
-
     - name: Change file ownership, group and permissions
       file:
-        path: /opt/tomcat8
+        path: /opt/tomcat
         owner: centos
         mode: '0777'
 
     - name: start and enable tomcat server
       shell: ./startup.sh
       args:
-        chdir: /opt/tomcat8/bin
+        chdir: /opt/tomcat/bin
     - name: deploy sample app
       copy:
         src: target/maven-archetype-webapp.war
-        dest: /opt/tomcat8/webapps/
+        dest: /opt/tomcat/webapps/
         owner: centos
         group: centos    
 
