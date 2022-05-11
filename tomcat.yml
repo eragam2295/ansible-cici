@@ -35,7 +35,7 @@
 
     - name: Change file ownership, group and permissions
       file:
-        path: /etc/systemd/system/tomcat.service
+        path: /opt/tomcat8
         owner: centos
         mode: '0777'
 
